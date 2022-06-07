@@ -15,16 +15,16 @@ const refs = {
   seconds: document.querySelector('[data-seconds]'),
 }
 
-//stylesheet
-
-
 
 const CURRENT_DATE = new Date;
 // console.log(CURRENT_DATE);
 let timerId = null;
+let getTime = null;
+
 
 //отключение кнопки при загрузке страницы
 refs.startBtn.setAttribute('disabled', true);
+
 
 const options = {
     enableTime: true,
@@ -32,28 +32,31 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-      console.log(selectedDates[0]);
+      // console.log(selectedDates[0]);
       const getSelectDates = selectedDates[0].getTime();
       const getCurrentDate = CURRENT_DATE.getTime();
       
       if (getSelectDates >getCurrentDate || timerId === null){
         refs.startBtn.removeAttribute('disabled');
-        refs.startBtn.addEventListener('click', timer(getSelectDates))
-        
+        refs.startBtn.addEventListener('click', timer)
+        getTime = getSelectDates;
       } else {
         refs.startBtn.setAttribute('disabled', true);
         Notify.failure('Please choose a date in the future')
       }
     },
   };
+
+
+// console.log(getTime);
 //инициализация flatpickr
   flatpickr(refs.input, options);
 
   
 
 
-function timer (selectDates){
-const selectDate = selectDates;
+function timer (){
+const selectDate = getTime;
 
   let timeId = setInterval(() =>{
     const timeNow = new Date;
@@ -65,7 +68,6 @@ const selectDate = selectDates;
       clearInterval(timeId)
     }
   },1000)
-
 };
 
 
@@ -87,17 +89,12 @@ function convertMs(ms) {
     const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
   
     refs.day.textContent = days;
-refs.hours.textContent = hours;
-refs.minutes.textContent = minutes;
-refs.seconds.textContent = seconds;
-  }
+    refs.hours.textContent = hours;
+    refs.minutes.textContent = minutes;
+    refs.seconds.textContent = seconds;
+  };
 
 //функция создания двузначного значения времени
 function addLeadingZero(value){
     return String(value).padStart(2,"0")
- }
-
- //функция обновления интерфейса таймера
-function updateTimer({ days, hours, minutes, seconds }){
-
-}
+ };
