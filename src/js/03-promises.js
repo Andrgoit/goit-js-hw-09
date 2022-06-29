@@ -18,7 +18,7 @@ function submitBtnHandler(event) {
 
   let result = Number(delay.value);
 
-  for (let i = 0; i < Number(amount.value); i += 1) {
+  for (let i = 1; i < Number(amount.value); i += 1) {
     createPromise(i, result)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
